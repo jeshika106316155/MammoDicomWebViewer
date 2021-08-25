@@ -484,6 +484,11 @@
 		// < !--variable declaration-- >
 
 		function setIndex(i) {
+			var table = document.getElementById("myTable");
+			for(var deleteRowNum=table.rows.length-1;deleteRowNum>0;deleteRowNum--)
+			{
+				table.deleteRow(deleteRowNum);
+			}
 			index = i;
 			if (colorchange == 1) {
 				borderred.style.borderColor = "transparent";
@@ -1080,7 +1085,6 @@
 			else if (selectedText == "Mammo Focal Asymetry") { url = "MammoFocalAsymetry.html"; }
 			else if (selectedText == "Mammo Question") { url = "MammoQuestion.html"; }
 
-			window.open(url, '_blank', 'location=yes,height=900,width=900,scrollbars=yes,status=yes,top=0,left=500');
 			var id = 0;
 			var annotationType = table.rows[rowslength].cells[0].innerHTML;
 			for (var i = 0; i < rowslength; i++) {
@@ -1091,7 +1095,12 @@
 			if (annotationType == "line") { id = cline[id]; }
 			else if (annotationType == "rectangle") { id = crect[id]; }
 			else if (annotationType == "circle") { id = ccircle[id]; }
-			document.cookie = "AnnotationID=" + id + ";";
+			document.cookie.split(";").forEach(function(c) { 
+				document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+			});
+			document.cookie = "RowNumber="+rowslength+";"
+			document.cookie = "AnnotationID=" + id ;
+			window.open(url, '_blank', 'location=yes,height=900,width=900,scrollbars=yes,status=yes,top=0,left=500');
 		}
 		function getSVG() {
 			var subSVG = svgstr.split("<");
@@ -1114,7 +1123,6 @@
 		}
 		function getline() {
 			drawCanvas.onmousedown = function (e) {
-				//paintline = true;
 				var ratiosw = viewPort.sw / viewPort.vw;
 				var ratiosh = viewPort.sh / viewPort.vh;
 				startX = e.pageX - document.getElementById("allcanvas").offsetLeft; //e=mouse cursor, this=canvas original x,
@@ -1129,15 +1137,6 @@
 					if (startY == ((m * startX) + b)) {
 						alert("id=" + cline[i])
 					}
-					// svgstr += '<line x1="';
-					// svgstr += parseInt(svgline[i][0]);
-					// svgstr += '" y1="';
-					// svgstr += parseInt(svgline[i][1]);
-					// svgstr += '" x2="';
-					// svgstr += parseInt(svgline[i][2]);
-					// svgstr += '" y2="';
-					// svgstr += parseInt(svgline[i][3]);
-					// svgstr += '" style="stroke:rgb(255,255,0);stroke-width:2" />\n';
 				}
 			}
 			drawCanvas.onmouseup = function (e) { }
@@ -1145,16 +1144,10 @@
 		function myFunction() {
 			document.getElementById("myDropdown").classList.toggle("show");
 		}
-
-		// Close the dropdown if the user clicks outside of it
-		// window.onclick = function (e) {
-		// 	if (!e.target.matches('.dropbtn')) {
-		// 		var myDropdown = document.getElementById("myDropdown");
-		// 		if (myDropdown.classList.contains('show')) {
-		// 			myDropdown.classList.remove('show');
-		// 		}
-		// 	}
-		// }
+		window.receiveDataFromPopup = function(findingId,rowNumber) {
+			var table = document.getElementById("myTable");
+			table.rows[rowNumber].cells[4].innerHTML='<a href="'+fhir.url+"/Observation/"+findingId+'">'+findingId+'</a>';
+		};
 	</script>
 </body>
 

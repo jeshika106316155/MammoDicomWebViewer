@@ -332,9 +332,9 @@ annotationObservation =
 }
 
 var fhir = {
-    "url": "http://hapi.fhir.org/baseR4/"
+    "url": "http://203.64.84.213:8080/fhir/"//"http://hapi.fhir.org/baseR4/"
 }
 var result = {
-    "url": "http://hapi.fhir.org/baseDstu3/"
+    "url": "http://203.64.84.213:8080/fhir/"//"http://hapi.fhir.org/baseDstu3/"
 }
 

@@ -1,6 +1,6 @@
 var cmass = new Array(15), ccal = new Array(15), casym = new Array(15), cdistort = new Array(15), cQuesCheck = new Array(15);
 var cline = [], crect = [], ccircle = [];
-cmass[0] = 0; ccal[0] = 0; casym[0] = 0; cdistort[0] = 0; cQuesCheck[0] = 0;
+cmass[0] = 0; ccal[0] = 0; casym[0] = 0; cdistort[0] = 0; cQuesCheck[0] = 0,rowNumber=0;
 function formInputsToXML(type, URL, uid, svgBase64, sx, sy, sw, sh, wc, ww, index, formID) {
 	var output;
 
@@ -49,7 +49,7 @@ function mammoXML(formID, formCode) {
 	var thisform = document.getElementById(formID);
 	var elements = thisform.elements;
 	var p = new Array(15), count = 1;
-	p[0] = "1168613";
+	p[0] = "2565";
 	if (formID == 'QuestionCheck') {
 		var que = ["RetractionSkin_", "ThickeningSkin_", "DilatedLactiferous_", "EnlargedAxillary_"];
 		for (i = 0; i < que.length; i++) {
@@ -90,10 +90,22 @@ function mammoXML(formID, formCode) {
 	Observation.code.coding[0].Display = "Physical findings of Breasts Narrative";
 	Observation.subject.reference = "Patient/" + p[0];
 	var ca = document.cookie.split(';');
-	id = ca[0].split('=');
+	var id=0;
+	ca.forEach(element => {
+		if(element.substring(0, 13).trim() =="AnnotationID")
+		{
+			id = element.split('=');
+			id=id[1];
+		}
+		if(element.substring(0, 9)=="RowNumber")
+		{
+			rowNumber = element.split('=');
+			rowNumber=rowNumber[1];
+		}
+	});
 
 	if (formID == 'mass') {
-		massObservation.derivedFrom[0].reference = "Observation/" + id[1];
+		massObservation.derivedFrom[0].reference = "Observation/" + id;
 		massObservation.valueCodeableConcept.coding[0].code = p[1];
 		massObservation.component[0].code.coding[0].code = p[3];
 		massObservation.component[0].code.coding[1].code = p[5];
@@ -203,8 +215,10 @@ function postData(jsonString, type, formID) {
 			var ret = JSON.parse(this.responseText);
 			if (formID != 'line' && formID != 'rectangle' && formID != 'circle') {
 				alert(this.responseText);
+				window.opener.receiveDataFromPopup(ret.id,rowNumber);
+				window.close();
 			}
-
+			var ret = JSON.parse(this.responseText);
 			//alert(str2[0]);
 			if (formID == 'mass')
 				cmass[cmass[0]] = ret.id;
@@ -223,7 +237,7 @@ function postData(jsonString, type, formID) {
 			if (formID == 'circle')
 				ccircle.push(ret.id);
 			//ccircle[currrows] = ret.id;
-
+			window.open(fhir.url + type+"/"+ret.id,"blank");
 		}
 	};
 	var data = JSON.stringify(jsonString);
