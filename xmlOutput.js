@@ -116,7 +116,7 @@ function mammoXML(formID, formCode) {
 		output = Object.assign(Observation, massObservation);
 	}
 	if (formID == 'calcifications') {
-		calcificationObservation.derivedFrom[0].reference = "Observation/" + id[1];
+		calcificationObservation.derivedFrom[0].reference = "Observation/" + id;
 		calcificationObservation.valueCodeableConcept.coding[0].code = p[1];
 		calcificationObservation.component[0].code.coding[0].code = p[3];
 		calcificationObservation.component[0].code.coding[1].code = p[5];
@@ -125,21 +125,21 @@ function mammoXML(formID, formCode) {
 		output = Object.assign(Observation, calcificationObservation);
 	}
 	if (formID == 'asymmetry') {
-		asymetryObservation.derivedFrom[0].reference = "Observation/" + id[1];
+		asymetryObservation.derivedFrom[0].reference = "Observation/" + id;
 		asymetryObservation.valueCodeableConcept.coding[0].code = p[1];
 		asymetryObservation.component[0].code.coding[0].code = p[3];
 		asymetryObservation.component[0].code.coding[1].code = p[5];
 		output = Object.assign(Observation, asymetryObservation);
 	}
 	if (formID == 'architecturalDistortion') {
-		architecturalDistortionObservation.derivedFrom[0].reference = "Observation/" + id[1];
+		architecturalDistortionObservation.derivedFrom[0].reference = "Observation/" + id;
 		architecturalDistortionObservation.valueCodeableConcept.coding[0].code = p[1];
 		architecturalDistortionObservation.component[0].code.coding[0].code = p[3];
 		architecturalDistortionObservation.component[0].code.coding[1].code = p[5];
 		output = Object.assign(Observation, architecturalDistortionObservation);
 	}
 	if (formID == 'QuestionCheck') {
-		questionObservation.derivedFrom[0].reference = "Observation/" + id[1];
+		questionObservation.derivedFrom[0].reference = "Observation/" + id;
 		questionObservation.component[0].code.coding[0].code = p[1];
 		questionObservation.component[1].code.coding[0].code = p[3];
 		questionObservation.component[2].code.coding[0].code = p[5];
